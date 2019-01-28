@@ -7,9 +7,11 @@ contract DappToken{
 	string public standard = "DappToken v0.1";
 	uint256 public totalSupply;
 	mapping(address => uint256) public balanceOf;
+	mapping(address => mapping(address => uint256)) public allowance;
 
 	// events
 	event Transfer(address indexed _from, address indexed _to, uint256 _value);
+	event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
 
 	// constructor
@@ -32,5 +34,20 @@ contract DappToken{
 
 	}
 
+	// approve function
+	function approve(address _spender, uint256 _value) public returns(bool success) {
 
+		// handle allowance
+		allowance[msg.sender][_spender] = _value;
+
+
+
+		//handle approve event
+		emit Approval(msg.sender, _spender, _value);
+
+
+		return true;
+	}
+
+	// transferFrom function
 }
