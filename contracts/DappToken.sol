@@ -36,18 +36,35 @@ contract DappToken{
 
 	// approve function
 	function approve(address _spender, uint256 _value) public returns(bool success) {
-
 		// handle allowance
 		allowance[msg.sender][_spender] = _value;
 
-
-
 		//handle approve event
 		emit Approval(msg.sender, _spender, _value);
-
 
 		return true;
 	}
 
 	// transferFrom function
+	function transferFrom(address _from, address _to, uint256 _value) public returns(bool success) {
+		// should have enogh balance to do the transaction
+		require(_value <= balanceOf[_from]);
+
+		// should not transfer more than allowed limut aka allowance
+		require(_value <= allowance[_from][msg.sender]);
+
+		// change balance
+		balanceOf[_from] -= _value;
+		balanceOf[_to] += _value;
+
+		//update the allowance
+		allowance[_from][msg.sender] -= _value;
+
+		// emit the transfer event
+		emit Transfer(_from, _to, _value);
+
+		return true;
+
+
+	}
 }
